@@ -1,0 +1,71 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: pods-list
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["list"]
+
+---
+
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: pods-list
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: mshekhawat
+roleRef:
+  kind: ClusterRole
+  name: pods-list
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mshekhawat
+spec: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-k8s-site
+  namespace: mshekhawat  
+spec:
+  type: LoadBalancer # Only works in public clouds like Azure
+  ports:
+  - port: 80
+    targetPort: 8000
+  selector:
+    app: python-k8s-site
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-k8s-site
+  namespace: mshekhawat  
+spec:
+  selector:
+    matchLabels:
+      app: python-k8s-site
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: python-k8s-site
+    spec:
+      containers:
+      - image: docker.io/manoj7shekhawat/my-k8s-site:v20230430-5
+        name: python-k8s-site
+        ports:
+        - containerPort: 8000
+          name: web
