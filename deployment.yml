@@ -59,6 +59,7 @@ metadata:
   name: python-k8s-site
   namespace: mshekhawat  
 spec:
+  replicas: 5
   selector:
     matchLabels:
       app: python-k8s-site
@@ -70,7 +71,7 @@ spec:
         app: python-k8s-site
     spec:
       containers:
-      - image: docker.io/manoj7shekhawat/my-k8s-site:v20230505-1
+      - image: docker.io/manoj7shekhawat/my-k8s-site:v20230505-2
         name: python-k8s-site
         ports:
         - containerPort: 8000
