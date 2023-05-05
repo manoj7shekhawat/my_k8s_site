@@ -118,6 +118,6 @@ agw = {
 public_ip_name = "mshekhawat_pip"
 
 tags = {
-  owner       = "manoj.shekhawat@sap.com"
+  owner       = "manoj7shekhawat"
   environment = "dev"
 }
